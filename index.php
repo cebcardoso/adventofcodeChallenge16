@@ -30,6 +30,10 @@ class ChallengeSixteen {
 		echo '</pre>';
 	}
 	
+	/*
+	* Accepts spin factor
+	* Performs spin on programs and updates programs
+	*/
 	function performSpin($spin) {
 		$programsToChange = $this->getPrograms();
 		$newPrograms = '';
@@ -44,6 +48,10 @@ class ChallengeSixteen {
 		$this->setPrograms(implode($newPrograms));
 	}
 	
+	/*
+	* Accepts positions for exchange
+	* Exchanges positions and updates programs
+	*/
 	function performExchange($positions) {
 		$programsToChange = $this->getPrograms();
 		$position1Value = $programsToChange[$positions[0]];
@@ -53,6 +61,10 @@ class ChallengeSixteen {
 		$this->setPrograms($programsToChange);
 	}
 	
+	/*
+	* Accepts progeams for partnering
+	* Gets positions and exchanges values and updates programs
+	*/
 	function performPartner($programsPartner) {
 		$programsToChange = $this->getPrograms();
 		$position1Key = array_search($programsPartner[0], str_split($programsToChange));
@@ -64,6 +76,9 @@ class ChallengeSixteen {
 		$this->setPrograms($programsToChange);
 	}
 	
+	/*
+	* Loops over dance moves and calls specfic actions while updating programs
+	*/	
 	function extractActions() {
 		foreach ($this->inputArray as $action) {
 			$actionType = $action[0];

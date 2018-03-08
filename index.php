@@ -1,5 +1,4 @@
 <?php
-
 class ChallengeSixteen {
 	private $inputArray;
 	private $programs;
@@ -58,6 +57,7 @@ class ChallengeSixteen {
 		$position2Value = $programsToChange[$positions[1]];
 		$programsToChange[$positions[0]] = $position2Value;
 		$programsToChange[$positions[1]] = $position1Value;
+		
 		$this->setPrograms($programsToChange);
 	}
 	
@@ -69,11 +69,8 @@ class ChallengeSixteen {
 		$programsToChange = $this->getPrograms();
 		$position1Key = array_search($programsPartner[0], str_split($programsToChange));
 		$position2Key = array_search($programsPartner[1], str_split($programsToChange));
-		$position1KeyValue = $programsToChange[$position1Key];
-		$position2KeyValue = $programsToChange[$position2Key];
-		$programsToChange[$position1Key] = $position2KeyValue;
-		$programsToChange[$position2Key] = $position1KeyValue;
-		$this->setPrograms($programsToChange);
+		
+		$this->performExchange(array($position1Key, $position2Key));
 	}
 	
 	/*
@@ -86,7 +83,7 @@ class ChallengeSixteen {
 			
 			switch ($actionType) {
 				case self::SPIN:
-					$this->performSpin(1);
+					$this->performSpin($instruction);
 					break;
 				case self::EXCHANGE:
 					$positions = explode("/", $instruction);
@@ -99,9 +96,42 @@ class ChallengeSixteen {
 			}
 		}
 	}
+	
+	/*
+	* Find out how many dances it takes to get to the original, this way you do not have to do it a billion times, only the remainder
+	*/
+	function getTimesToOriginal() {
+		$total = 0;
+		// set it back to the original
+		$this->setPrograms('abcdefghijklmnop');
+		
+		while(true) {
+			$this->extractActions();
+			$total++;
+			
+			if ($this->getPrograms() === 'abcdefghijklmnop') {
+				break;
+			}
+		}
+		
+		return $total;
+	}
+	
+	/*
+	* Perform the dance a billion times (equivalent coz using mod)
+	*/
+	function billionTimes() {
+		$total = $this->getTimesToOriginal();
+		
+		for ($k = 0; $k < (1000000000 % $total); $k++) {
+			$this->extractActions();
+		}
+	}
 }
 
 	$challengeSixteen = new ChallengeSixteen();
 	$challengeSixteen->extractActions();
-	echo 'Final dance order: ' . $challengeSixteen->getPrograms();
+	echo 'Challenge16a: ' . $challengeSixteen->getPrograms();
+	$challengeSixteen->billionTimes();
+	echo '<br />Challenge16b: ' . $challengeSixteen->getPrograms();
 ?>
